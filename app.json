@@ -15,7 +15,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "backgroundColor": "#ffffff"
     },
     "android": {
       "adaptiveIcon": {
@@ -24,7 +25,9 @@
       }
     },
     "web": {
-      "favicon": "./assets/favicon.png"
-    }
-  }
+      "bundler": "metro"
+    },
+    "sdkVersion": "48.0.0"
+  },
+  "name": "lostanimalsappfrontend"
 }
