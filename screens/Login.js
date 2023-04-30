@@ -62,7 +62,7 @@ const Login = ({navigation}) => {
                   password: credentials.password,
                 });
                 console.log(response.data.userDTO)
-                const token = response.data;
+                const token = response.data.token;
                 await saveToken(token);
                 persistLogin(response.data.userDTO, response.message, response.status )
               } catch (error) {
