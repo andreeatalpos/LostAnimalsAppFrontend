@@ -8,6 +8,7 @@ const StatusBarHeight = Constants.statusBarHeight;
 
 export const Colors = {
     white: "#FFFFFF",
+    black: "#000000",
     pink: "#FFD1DC",
     orange: "#FFA07A",
     light_yellow: "#FFF8DC",
@@ -20,7 +21,7 @@ export const Colors = {
 }
 
 
-const {white, pink, orange, light_yellow, blue, purple, grey, green, red, light_green} = Colors
+const {white, pink, orange, light_yellow, blue, purple, grey, green, red, light_green, black} = Colors
 
 export const StyledContainer = styled.View`
     flex: 1;
@@ -49,8 +50,22 @@ export const StyledTextInputForm = styled.TextInput`
     height: 60px;
     margin-vertical: 3px;
     margin-bottom: 10px;
-    color: ${purple};
+    color: ${black};
 `;
+
+export const StyledTextInputFormBigger = styled.TextInput`
+    background-color: ${light_yellow};
+    padding: 15px;
+    padding-left: 20px;
+    padding-right: 55px;
+    border-radius: 5px;
+    font-size: 15px;
+    height: 100px;
+    margin-vertical: 3px;
+    margin-bottom: 10px;
+    color: ${black};
+`;
+
 
 export const InnerContainer = styled.View`
     flex: 1;
@@ -91,7 +106,8 @@ export const SubTitle = styled.Text`
 `;
 
 export const StyledFormArea = styled.View`
-    width: 90%;
+    width: 80%;
+    margin-left: 10%;
 `;
 
 export const StyledTextInput = styled.TextInput`
@@ -276,5 +292,29 @@ export const HomeStyledButton = styled.TouchableOpacity`
     margin-vertical: 10px;
     height: 60px;
 `;
+
+export const ImageContainer = styled.View`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 20px;
+`;
+
+export const SelectedImage = styled.Image`
+  max-width: 100%;
+  max-height: 250px;
+`;
+
+export const CuteButton = styled.TouchableOpacity`
+    padding: 15px;
+    background-color: ${pink};
+    justify-content: center;
+    align-items: center;
+    border-radius: 25px;
+    margin-vertical: 10px;
+    margin-left: 20%;
+    margin-right: 20%;
+    height: 60px;
+`
 
 
