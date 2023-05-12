@@ -23,7 +23,7 @@ import { Formik } from "formik";
 
 // validation schema
 const animalSchema = Yup.object().shape({
-  animalName: Yup.string().required("Animal name is required"),
+  animalName: Yup.string().min(1).required("Animal name is required"),
   breed: Yup.string().required("Breed is required"),
   color: Yup.string().required("Color is required"),
   age: Yup.number()
@@ -34,7 +34,7 @@ const animalSchema = Yup.object().shape({
   animalInfo: Yup.string().required("Animal info is required"),
 });
 
-const AnimalForm = ({ route }) => {
+const AnimalForm = ({ navigation, route }) => {
   const { imageFileName, isFound } = route.params;
   console.log("found  " + isFound);
   console.log("file  " + imageFileName);
@@ -51,47 +51,16 @@ const AnimalForm = ({ route }) => {
     username: storedCredentials.username,
     fileName: imageFileName,
   });
-  const [animalName, setAnimalName] = useState("");
-  const [animalInfo, setAnimalInfo] = useState("");
-  const [breed, setBreed] = useState("");
-  const [color, setColor] = useState("");
-  const [age, setAge] = useState("");
-  const [species, setSpecies] = useState("");
-  const [validationErrors, setValidationErrors] = useState({});
   const [errors, setErrors] = useState({});
-  const navigation = useNavigation();
 
-  //   async function handleFormSubmit(values) {
-  //     const animalData = {
-  //       animalName: values.animalName,
-  //       animalInfo: values.animalInfo,
-  //       breed: values.breed,
-  //       color: values.color,
-  //       age: parseInt(values.age),
-  //       species: values.species,
-  //       isFound: isFound,
-  //       username: storedCredentials.username,
-  //       fileName: imageFileName,
-  //     };
-  //     try {
-  //       console.log(animalData);
-  //       const response = await baseAxios.post("animal", animalData);
-  //       console.log(response);
-  //     } catch (error) {
-  //       console.log("eroare la create animal");
-  //       console.error(error.message);
-  //     }
-  //   }
-
-  async function handleFormSubmit(event) {
-    event.preventDefault();
+  async function handleFormSubmit(values) {
     const data = {
-      animalName: animalName,
-      animalInfo: animalInfo,
-      breed: breed,
-      color: color,
-      age: parseInt(age),
-      species: species,
+      animalName: values.animalName,
+      animalInfo: values.animalInfo,
+      breed: values.breed,
+      color: values.color,
+      age: parseInt(values.age),
+      species: values.species,
       isFound: isFound,
       username: storedCredentials.username,
       fileName: imageFileName,
@@ -101,12 +70,12 @@ const AnimalForm = ({ route }) => {
       .then(async () => {
         try {
           console.log(animalData);
-          const response = await baseAxios.post("animal", data);
+          const response = await baseAxios.post("/animal", data);
           console.log(response);
           Alert.alert("Success", "Animal info submitted successfully", [
             {
               text: "OK",
-              onPress: () => navigation.pop(),
+              onPress: () => navigation.navigate("Home"),
             },
           ]);
         } catch (error) {
@@ -123,6 +92,19 @@ const AnimalForm = ({ route }) => {
       });
   }
 
+  const handleMessage = (message) => {
+    console.log(message);
+    try {
+      Alert.alert("Error", message, [
+        {
+          text: "OK",
+        },
+      ]);
+    } catch (error) {
+      console.log("aici " + error.message);
+    }
+  };
+
   return (
     <KeyboardAvoidingWrapper>
       <StyledContainer>
@@ -136,7 +118,21 @@ const AnimalForm = ({ route }) => {
             age: "",
             species: "",
           }}
-          onSubmit={handleFormSubmit}
+          validationSchema={animalSchema}
+          onSubmit={(values) => {
+            if (
+              values.animalName === "" ||
+              values.color === "" ||
+              values.age === "" ||
+              values.species === "" ||
+              values.animalInfo === "" ||
+              values.breed === ""
+            ) {
+              handleMessage("Please fill all the fields");
+            } else {
+              handleFormSubmit(values);
+            }
+          }}
         >
           {({ handleChange, handleBlur, handleSubmit, values, touched }) => (
             <StyledFormArea>
@@ -173,7 +169,7 @@ const AnimalForm = ({ route }) => {
                 onChangeText={handleChange("age")}
                 onBlur={handleBlur("age")}
               />
-              {errors.animalName && touched.age && (
+              {errors.age && touched.age && (
                 <StyledErrorText>{errors.age}</StyledErrorText>
               )}
               <StyledTextInputForm
@@ -182,7 +178,7 @@ const AnimalForm = ({ route }) => {
                 onChangeText={handleChange("species")}
                 onBlur={handleBlur("species")}
               />
-              {errors.animalName && touched.species && (
+              {errors.species && touched.species && (
                 <StyledErrorText>{errors.species}</StyledErrorText>
               )}
               <StyledInputLabel>
@@ -195,11 +191,13 @@ const AnimalForm = ({ route }) => {
                 onChangeText={handleChange("animalInfo")}
                 onBlur={handleBlur("animalInfo")}
               />
-              {errors.animalName && touched.animalName && (
-                <StyledErrorText>{errors.animalName}</StyledErrorText>
+              {errors.animalInfo && touched.animalInfo && (
+                <StyledErrorText>{errors.animalInfo}</StyledErrorText>
               )}
               <CuteButton onPress={handleSubmit}>
-                <ButtonText style={{ color: "white" }}>Submit</ButtonText>
+                <ButtonText tyle="submit" style={{ color: "white" }}>
+                  Submit
+                </ButtonText>
               </CuteButton>
             </StyledFormArea>
           )}

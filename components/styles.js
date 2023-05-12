@@ -40,7 +40,7 @@ export const StyledContainer = styled.View`
   padding-top: ${StatusBarHeight + 30}px;
   padding-bottom: 45%;
   background-color: ${white};
-  flexgrow: 1;
+  flex-grow: 1;
 `;
 
 export const StyledContainerAnimal = styled.View`
@@ -48,7 +48,7 @@ export const StyledContainerAnimal = styled.View`
   padding: 25px;
   padding-top: 5%;
   background-color: ${white};
-  flexgrow: 1;
+  flex-grow: 1;
 `;
 
 export const StyledTextInputForm = styled.TextInput`

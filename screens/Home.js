@@ -70,6 +70,14 @@ const Home = ({ navigation }) => {
               >
                 <ButtonText>I found a pet</ButtonText>
               </HomeStyledButton>
+              <HomeStyledButton
+                // onPress={() => navigation.navigate('FoundAnimal')}
+                onPress={() =>
+                  navigation.navigate("AnimalsList", { isFound: false })
+                }
+              >
+                <ButtonText>Show all lost animals</ButtonText>
+              </HomeStyledButton>
             </View>
             {/* <Avatar source={require('./../assets/images/logo.png')}/> */}
             <Line />

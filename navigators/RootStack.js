@@ -20,6 +20,7 @@ import AnimalPage from "../screens/AnimalPage";
 //credentials context
 import { CredentialsContext } from "./../components/CredentialsContext";
 import AnimalForm from "../components/AnimalForm";
+import AnimalsList from "../screens/AnimalsList";
 
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
@@ -56,6 +57,7 @@ const RootStack = () => {
                 <Drawer.Screen name="Home" component={Home} />
                 <Drawer.Screen name="AnimalForm" component={AnimalForm} />
                 <Stack.Screen name="AnimalPage" component={AnimalPage} />
+                <Stack.Screen name="AnimalsList" component={AnimalsList} />
               </Drawer.Navigator>
             ) : (
               <Stack.Navigator

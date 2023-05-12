@@ -1,46 +1,20 @@
 import React, { useState, useContext } from "react";
-import { useRoute } from "@react-navigation/native";
+import { Alert } from "react-native";
 import {
-  StyleSheet,
-  Text,
-  View,
-  TextInput,
-  Image,
-  TouchableOpacity,
-  Alert,
-} from "react-native";
-import {
-  BottomHalf,
-  StyledInputLabel,
   ImageContainer,
   SelectedImage,
-  StyledTextInput,
-  IconBg,
-  StyledContainer,
-  TopHalf,
-  Colors,
   PageTitle,
-  InfoText,
-  EmphasizeText,
-  StyledButton,
   ButtonText,
-  InlineGroup,
-  TextLink,
-  TextLinkContent,
-  SubTitle,
   StyledContainerAnimal,
   StyledTextInputForm,
   CuteButton,
 } from "../components/styles";
 import { CredentialsContext } from "../components/CredentialsContext";
-import AnimalForm from "../components/AnimalForm";
 
 import * as ImagePicker from "expo-image-picker";
 import baseAxios from "../components/axios/ApiManager";
 //keyboard avoiding wrapper
 import KeyboardAvoidingWrapper from "../components/KeyboardAvoidingWrapper";
-import * as FileSystem from "expo-file-system";
-import { Modal } from "react-native";
 
 const AnimalPage = ({ navigation, route }) => {
   const [animalData, setAnimalData] = useState(null);

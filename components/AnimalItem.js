@@ -1,15 +1,34 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View, Image } from "react-native";
 
+import { ActivityIndicator } from "react-native";
+
 const AnimalItem = ({ animal }) => {
+  console.log(animal.description);
+  const [imageUri, setImageUri] = useState("");
+  useEffect(() => {
+    const convertImage = async () => {
+      if (animal.file && animal.file.length > 0) {
+        setImageUri(animal.file);
+      }
+    };
+
+    convertImage();
+  }, [animal.file]);
   return (
     <View style={styles.container}>
-      <Image source={{ uri: animal.imageUri }} style={styles.image} />
-      <View style={styles.textContainer}>
-        <Text style={styles.name}>{animal.name}</Text>
-        <Text style={styles.info}>
-          {animal.breed} | {animal.color} | {animal.age} | {animal.species}
-        </Text>
+      <View>
+        {imageUri ? (
+          <Image
+            source={{
+              uri: `data:image/jpeg;base64,${imageUri}`,
+            }}
+            style={{ width: 200, height: 200 }}
+          />
+        ) : (
+          <ActivityIndicator />
+        )}
+        <Text style={styles.name}>{animal.description}</Text>
       </View>
     </View>
   );
