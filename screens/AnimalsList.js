@@ -22,6 +22,7 @@ import { CredentialsContext } from "./../components/CredentialsContext";
 import AnimalPage from "./AnimalPage";
 import baseAxios from "../components/axios/ApiManager";
 import AnimalItem from "../components/AnimalItem";
+import { ScrollView } from "react-native-gesture-handler";
 
 const AnimalsList = ({ navigation, route }) => {
   const { isFound } = route.params;
@@ -37,14 +38,16 @@ const AnimalsList = ({ navigation, route }) => {
   }
 
   return (
-    <View>
-      <CuteButton onPress={getAnimals}>
-        <ButtonText>Show animals</ButtonText>
-      </CuteButton>
-      {animals.map((animal, index) => (
-        <AnimalItem key={index} animal={animal} />
-      ))}
-    </View>
+    <ScrollView>
+      <View>
+        <CuteButton onPress={getAnimals}>
+          <ButtonText>Show animals</ButtonText>
+        </CuteButton>
+        {animals.map((animal, index) => (
+          <AnimalItem key={index} animal={animal} />
+        ))}
+      </View>
+    </ScrollView>
   );
 };
 

@@ -4,7 +4,7 @@ import { StyleSheet, Text, View, Image } from "react-native";
 import { ActivityIndicator } from "react-native";
 
 const AnimalItem = ({ animal }) => {
-  console.log(animal.description);
+  console.log(animal.animalInfo);
   const [imageUri, setImageUri] = useState("");
   useEffect(() => {
     const convertImage = async () => {
@@ -15,20 +15,25 @@ const AnimalItem = ({ animal }) => {
 
     convertImage();
   }, [animal.file]);
+
   return (
     <View style={styles.container}>
-      <View>
-        {imageUri ? (
-          <Image
-            source={{
-              uri: `data:image/jpeg;base64,${imageUri}`,
-            }}
-            style={{ width: 200, height: 200 }}
-          />
-        ) : (
-          <ActivityIndicator />
-        )}
-        <Text style={styles.name}>{animal.description}</Text>
+      {imageUri ? (
+        <Image
+          source={{
+            uri: `data:image/jpeg;base64,${imageUri}`,
+          }}
+          style={styles.image}
+        />
+      ) : (
+        <ActivityIndicator />
+      )}
+      <View style={styles.textContainer}>
+        <Text style={styles.name}>{animal.animalInfo}</Text>
+        <Text style={styles.name}>Contact details:</Text>
+        <Text style={styles.name}>{animal.fullName}</Text>
+        <Text style={styles.name}>{animal.phoneNumber}</Text>
+        <Text style={styles.name}>{animal.email}</Text>
       </View>
     </View>
   );
@@ -53,8 +58,8 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   image: {
-    width: 75,
-    height: 75,
+    width: 125,
+    height: 125,
     borderRadius: 5,
     marginRight: 10,
   },

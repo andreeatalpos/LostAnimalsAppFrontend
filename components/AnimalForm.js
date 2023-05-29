@@ -11,6 +11,7 @@ import {
   StyledTextInputFormBigger,
   SubTitle,
   StyledErrorText,
+  StyledContainerForm,
 } from "./styles";
 import { Alert } from "react-native";
 import KeyboardAvoidingWrapper from "./KeyboardAvoidingWrapper";
@@ -34,7 +35,12 @@ const animalSchema = Yup.object().shape({
   animalInfo: Yup.string().required("Animal info is required"),
 });
 
-const AnimalForm = ({ navigation, route }) => {
+const AnimalForm = ({
+  navigation,
+  route,
+  handleAnimalFormSubmit,
+  handleCancelAnimalForm,
+}) => {
   const { imageFileName, isFound } = route.params;
   console.log("found  " + isFound);
   console.log("file  " + imageFileName);
@@ -75,7 +81,9 @@ const AnimalForm = ({ navigation, route }) => {
           Alert.alert("Success", "Animal info submitted successfully", [
             {
               text: "OK",
-              onPress: () => navigation.navigate("Home"),
+              onPress: () => {
+                handleAnimalFormSubmit();
+              },
             },
           ]);
         } catch (error) {
@@ -107,7 +115,7 @@ const AnimalForm = ({ navigation, route }) => {
 
   return (
     <KeyboardAvoidingWrapper>
-      <StyledContainer>
+      <StyledContainerForm>
         <SubTitle>Please provide animal info</SubTitle>
         <Formik
           initialValues={{
@@ -199,10 +207,15 @@ const AnimalForm = ({ navigation, route }) => {
                   Submit
                 </ButtonText>
               </CuteButton>
+              <CuteButton onPress={handleCancelAnimalForm}>
+                <ButtonText tyle="submit" style={{ color: "white" }}>
+                  Cancel
+                </ButtonText>
+              </CuteButton>
             </StyledFormArea>
           )}
         </Formik>
-      </StyledContainer>
+      </StyledContainerForm>
     </KeyboardAvoidingWrapper>
   );
 };

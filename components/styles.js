@@ -14,10 +14,12 @@ export const Colors = {
   light_yellow: "#FFF8DC",
   blue: "#ADD8E6",
   purple: "#B19CD9",
-  grey: "#C9C9C9",
+  gray: "#C9C9C9",
   green: "#B4E197",
   red: "#FF6961",
   light_green: "rgba(16, 185, 129, 0.1)",
+  light_pink: "#F8F1F190",
+  transparent_white: "#FFFFFF80",
 };
 
 const {
@@ -27,11 +29,13 @@ const {
   light_yellow,
   blue,
   purple,
-  grey,
+  gray,
   green,
   red,
   light_green,
   black,
+  light_pink,
+  transparent_white,
 } = Colors;
 
 export const StyledContainer = styled.View`
@@ -39,7 +43,15 @@ export const StyledContainer = styled.View`
   padding: 25px;
   padding-top: ${StatusBarHeight + 30}px;
   padding-bottom: 45%;
-  background-color: ${white};
+  background-color: rgba(255, 255, 255, 0.8); /* Updated background color */
+  flex-grow: 1;
+`;
+
+export const StyledContainerForm = styled.View`
+  flex: 1;
+  padding: 25px;
+  padding-bottom: 15%;
+  background-color: rgba(255, 255, 255, 0.8); /* Updated background color */
   flex-grow: 1;
 `;
 
@@ -47,8 +59,13 @@ export const StyledContainerAnimal = styled.View`
   flex: 1;
   padding: 25px;
   padding-top: 5%;
-  background-color: ${white};
+  background-color: rgba(255, 255, 255, 0.8); /* Updated background color */
   flex-grow: 1;
+`;
+
+export const ButtonContainer = styled.View`
+  flex-direction: row;
+  margin-bottom: 10px;
 `;
 
 export const StyledTextInputForm = styled.TextInput`
@@ -94,6 +111,20 @@ export const InnerContainer = styled.View`
   flex: 1;
   width: 100%;
   align-items: center;
+  background-color: ${transparent_white};
+  padding: 10px;
+`;
+
+export const InnerItem = styled.View`
+  margin-bottom: 20px;
+`;
+
+export const InnerContainerLeft = styled.View`
+  width: 100%;
+  align-items: flex-start;
+  margin-left: 10%;
+  background-color: ${transparent_white};
+  height: 200px;
 `;
 
 export const PageLogo = styled.Image`
@@ -120,7 +151,7 @@ export const SubTitle = styled.Text`
   margin-bottom: 20px;
   letter-spacing: 1.5px;
   font-weight: bold;
-  color: ${blue};
+  color: ${black};
   text-align: center;
 
   ${(props) =>
@@ -132,8 +163,8 @@ export const SubTitle = styled.Text`
 `;
 
 export const StyledFormArea = styled.View`
-  width: 80%;
-  margin-left: 10%;
+  width: 100%;
+  margin-top: 10%;
 `;
 
 export const StyledTextInput = styled.TextInput`
@@ -177,14 +208,6 @@ export const StyledButton = styled.TouchableOpacity`
   border-radius: 5px;
   margin-vertical: 5px;
   height: 60px;
-
-  // ${(props) =>
-    props.google == true &&
-    `
-    //     background-color: ${green};
-    //     flex-direction: row;
-    //     justify-content: center;
-    // `}
 `;
 
 export const ButtonText = styled.Text`
@@ -291,7 +314,7 @@ export const IconBg = styled.View`
 `;
 
 export const InfoText = styled.Text`
-  color: ${grey};
+  color: ${gray};
   font-size: 15px;
   text-align: center;
 `;
@@ -316,11 +339,13 @@ export const AppBackground = styled.View`
 export const HomeStyledButton = styled.TouchableOpacity`
   padding: 15px;
   background-color: ${light_green};
+  border: 1px solid ${gray};
   justify-content: center;
   align-items: center;
   border-radius: 25px;
   margin-vertical: 10px;
   height: 60px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3); /* Add shadow */
 `;
 
 export const ImageContainer = styled.View`
@@ -336,13 +361,28 @@ export const SelectedImage = styled.Image`
 `;
 
 export const CuteButton = styled.TouchableOpacity`
-  padding: 15px;
-  background-color: ${pink};
+  background-color: ${(props) => (props.active ? light_green : pink)};
+  flex: 1;
   justify-content: center;
   align-items: center;
   border-radius: 25px;
-  margin-vertical: 10px;
-  margin-left: 20%;
-  margin-right: 20%;
+  margin-top: 10px;
   height: 60px;
+`;
+
+export const CuteButton2 = styled.TouchableOpacity`
+background-color: ${pink}
+  justify-content: center;
+  align-items: center;
+  border-radius: 25px;
+  margin-top: 10px;
+  height: 60px;
+  width: 100px;
+`;
+
+export const LoadingContainer = styled.View`
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  height: 400px;
 `;

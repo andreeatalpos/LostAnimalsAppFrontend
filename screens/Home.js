@@ -20,7 +20,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { CredentialsContext } from "./../components/CredentialsContext";
 import AnimalPage from "./AnimalPage";
 
-const Home = ({ navigation }) => {
+const Home = ({ navigation, handleShowAnimalPage }) => {
   //context
   const { storedCredentials, setStoredCredentials } =
     useContext(CredentialsContext);
@@ -41,10 +41,11 @@ const Home = ({ navigation }) => {
     <>
       <StatusBar style="purple" />
       <InnerContainer>
-        <HomeImage source={require("./../assets/images/home9.jpg")} />
+        {/* <HomeImage source={require("./../assets/images/home9.jpg")} /> */}
         <HomeContainer>
           <PageTitle home={true}>
-            Welcome, {fullName || "James Smith"}!
+            {fullName != null ? "Welcome, " + fullName : "Welcome to PetFinder"}
+            !
           </PageTitle>
           <SubTitle home={true}>
             {"Helping you to reunite with your furry friend"}
@@ -56,28 +57,30 @@ const Home = ({ navigation }) => {
             <View>
               <SubTitle>Lost or Found an Animal?</SubTitle>
               <HomeStyledButton
-                onPress={() =>
-                  navigation.navigate("AnimalPage", { isFound: false })
-                }
+                // onPress={() =>
+                //   navigation.navigate("AnimalPage", { isFound: false })
+                // }
+                onPress={() => handleShowAnimalPage(false)}
               >
                 <ButtonText>I lost my pet</ButtonText>
               </HomeStyledButton>
               <HomeStyledButton
                 // onPress={() => navigation.navigate('FoundAnimal')}
-                onPress={() =>
-                  navigation.navigate("AnimalPage", { isFound: true })
-                }
+                // onPress={() =>
+                //   navigation.navigate("AnimalPage", { isFound: true })
+                // }
+                onPress={() => handleShowAnimalPage(true)}
               >
                 <ButtonText>I found a pet</ButtonText>
               </HomeStyledButton>
-              <HomeStyledButton
+              {/* <HomeStyledButton
                 // onPress={() => navigation.navigate('FoundAnimal')}
                 onPress={() =>
                   navigation.navigate("AnimalsList", { isFound: false })
                 }
               >
                 <ButtonText>Show all lost animals</ButtonText>
-              </HomeStyledButton>
+              </HomeStyledButton> */}
             </View>
             {/* <Avatar source={require('./../assets/images/logo.png')}/> */}
             <Line />

@@ -10,13 +10,18 @@ import {
   CuteButton,
 } from "../components/styles";
 import { CredentialsContext } from "../components/CredentialsContext";
-
+import { ImageManipulator } from "expo-image-manipulator";
 import * as ImagePicker from "expo-image-picker";
 import baseAxios from "../components/axios/ApiManager";
 //keyboard avoiding wrapper
 import KeyboardAvoidingWrapper from "../components/KeyboardAvoidingWrapper";
 
-const AnimalPage = ({ navigation, route }) => {
+const AnimalPage = ({
+  navigation,
+  route,
+  handleShowAnimalForm,
+  handleCancelAnimalPage,
+}) => {
   const [animalData, setAnimalData] = useState(null);
   const [imageUri, setImageUri] = useState("");
   const [imageDescription, setImageDescription] = useState("");
@@ -67,11 +72,6 @@ const AnimalPage = ({ navigation, route }) => {
     }
   };
 
-  // const downloadImage = async (uri) => {
-  //   const base64 = await FileSystem.readAsStringAsync(uri, { encoding: 'base64' });
-  //   return base64;
-  // };
-
   const handleAnimalFormSubmit = (data) => {
     setAnimalData(data);
   };
@@ -106,15 +106,25 @@ const AnimalPage = ({ navigation, route }) => {
       setImageUri("");
       setImageDescription("");
       setShowAnimalForm(true);
-      console.log("am trimissss" + imageFileName);
-      navigation.navigate("AnimalForm", {
-        imageFileName: response.data,
-        isFound: isFound,
-      });
+      console.log("am trimissss" + response.data);
+      // navigation.navigate("AnimalForm", {
+      //   imageFileName: response.data,
+      //   isFound: isFound,
+      // });
+      handleShowAnimalForm(response.data);
     } catch (error) {
       console.error(error);
       Alert.alert("Error", "Failed to upload image");
     }
+  }
+
+  async function resizeImage(uri, maxWidth) {
+    const manipResult = await ImageManipulator.manipulateAsync(
+      uri,
+      [{ resize: { maxWidth } }],
+      { compress: 0.5, format: "jpeg" } // Adjust the compression quality and format as needed
+    );
+    return manipResult;
   }
 
   const handleCancel = () => {
@@ -161,25 +171,15 @@ const AnimalPage = ({ navigation, route }) => {
         </ImageContainer>
         {isImageSelected && (
           <CuteButton onPress={handleCancel}>
-            <ButtonText>Cancel</ButtonText>
+            <ButtonText>Wrong photo</ButtonText>
           </CuteButton>
         )}
         <CuteButton onPress={handleSubmit}>
           <ButtonText>Submit Details</ButtonText>
         </CuteButton>
-        {/* {
-        showAnimalForm && (
-          <AnimalForm /> 
-        )
-      } */}
-        {/* <Modal 
-        visible = {showAnimalForm} 
-        animationType="slide"
-        transparent={true}
-        style={{justifyContent: 'center', alignItems: 'center'}}
-        >
-        <AnimalForm/>
-      </Modal> */}
+        <CuteButton onPress={handleCancelAnimalPage}>
+          <ButtonText>Cancel</ButtonText>
+        </CuteButton>
       </StyledContainerAnimal>
     </KeyboardAvoidingWrapper>
   );

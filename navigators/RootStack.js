@@ -1,8 +1,5 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import { Colors, AppBackground } from "../components/styles";
-//colors
-const { purple, light_yellow, grey, orange, blue, white } = Colors;
-// react navigation
 import { NavigationContainer } from "@react-navigation/native";
 import {
   createDrawerNavigator,
@@ -11,75 +8,100 @@ import {
   DrawerItem,
 } from "@react-navigation/drawer";
 import { createStackNavigator } from "@react-navigation/stack";
-import { Button } from "react-native";
-//screens
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import jwtDecode from "jwt-decode";
+import { CredentialsContext } from "./../components/CredentialsContext";
+import BottomBar from "../screens/BottomBar";
+import Home from "./../screens/Home";
+import AnimalForm from "../components/AnimalForm";
+import AnimalPage from "../screens/AnimalPage";
+import AnimalsList from "../screens/AnimalsList";
+import HomeNew from "../screens/HomeNew";
 import Login from "./../screens/Login";
 import Register from "./../screens/Register";
-import Home from "./../screens/Home";
-import AnimalPage from "../screens/AnimalPage";
-//credentials context
-import { CredentialsContext } from "./../components/CredentialsContext";
-import AnimalForm from "../components/AnimalForm";
-import AnimalsList from "../screens/AnimalsList";
+import LostAndFound from "../screens/LostAndFound";
+import UserAccountPage from "../screens/UserAccountPage";
+import MyPets from "../screens/MyPets";
 
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
 
 const CustomDrawerContent = (props) => {
-  const { storedCredentials, onLogout } = props;
+  const { storedCredentials, setStoredCredentials } =
+    useContext(CredentialsContext);
+
+  useEffect(() => {
+    const checkTokenExpiration = async () => {
+      const token = await AsyncStorage.getItem("token");
+      if (token) {
+        const { exp } = jwtDecode(token);
+        const expirationDate = new Date(exp * 1000);
+
+        console.log(expirationDate);
+        console.log(exp);
+        if (Date.now() >= exp * 1000) {
+          console.log("EXPIREEED");
+          // Token has expired
+          setStoredCredentials(null);
+        }
+      }
+    };
+
+    checkTokenExpiration();
+  }, []);
 
   return (
     <DrawerContentScrollView {...props}>
       <DrawerItemList {...props} />
       {storedCredentials ? (
-        <DrawerItem label="Logout" onPress={() => onLogout()} />
+        <DrawerItem label="Logout" onPress={() => setStoredCredentials(null)} />
       ) : null}
     </DrawerContentScrollView>
   );
 };
 
 const RootStack = () => {
+  const { storedCredentials, setStoredCredentials } =
+    useContext(CredentialsContext);
+
   return (
-    <CredentialsContext.Consumer>
-      {({ storedCredentials, setStoredCredentials }) => (
-        <AppBackground>
-          <NavigationContainer>
-            {storedCredentials ? (
-              <Drawer.Navigator
-                drawerContent={(props) => (
-                  <CustomDrawerContent
-                    storedCredentials={storedCredentials}
-                    onLogout={() => setStoredCredentials(null)}
-                    {...props}
-                  />
-                )}
-              >
-                <Drawer.Screen name="Home" component={Home} />
-                <Drawer.Screen name="AnimalForm" component={AnimalForm} />
-                <Stack.Screen name="AnimalPage" component={AnimalPage} />
-                <Stack.Screen name="AnimalsList" component={AnimalsList} />
-              </Drawer.Navigator>
-            ) : (
-              <Stack.Navigator
-                name="stack-navigator"
-                screenOptions={{
-                  headerTintColor: orange,
-                  headerTransparent: true,
-                  headerTitle: "",
-                  headerLeftContainerStyle: {
-                    paddingLeft: 20,
-                  },
-                }}
-                initialRouteName="Login"
-              >
-                <Stack.Screen name="Login" component={Login} />
-                <Stack.Screen name="Register" component={Register} />
-              </Stack.Navigator>
-            )}
-          </NavigationContainer>
-        </AppBackground>
-      )}
-    </CredentialsContext.Consumer>
+    <AppBackground>
+      <NavigationContainer>
+        {storedCredentials ? (
+          <Drawer.Navigator
+            drawerContent={(props) => <CustomDrawerContent {...props} />}
+          >
+            <Drawer.Screen name="HomeNew" component={HomeNew} />
+            <Drawer.Screen name="AnimalForm" component={AnimalForm} />
+            <Drawer.Screen
+              name="AnimalPage"
+              component={AnimalPage}
+              initialParams={{ isFound: false }}
+            />
+            <Drawer.Screen name="AnimalsList" component={AnimalsList} />
+            <Drawer.Screen name="Home" component={Home} />
+            <Drawer.Screen name="LostAndFound" component={LostAndFound} />
+            <Drawer.Screen name="UserAccountPage" component={UserAccountPage} />
+            <Drawer.Screen name="MyPets" component={MyPets} />
+          </Drawer.Navigator>
+        ) : (
+          <Stack.Navigator
+            initialRouteName="Login"
+            screenOptions={{
+              headerTransparent: true,
+              headerTitle: "",
+              headerLeftContainerStyle: {
+                paddingLeft: 20,
+              },
+            }}
+          >
+            <Stack.Screen name="Login" component={Login} />
+            <Stack.Screen name="Register" component={Register} />
+          </Stack.Navigator>
+        )}
+        <BottomBar />
+      </NavigationContainer>
+    </AppBackground>
   );
 };
 

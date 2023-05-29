@@ -6,10 +6,9 @@ import { CredentialsContext } from "../CredentialsContext";
 
 // //context
 // const { storedCredentials, setStoredCredentials } =
-//   useContext(CredentialsContext);
 
 const baseAxios = axios.create({
-  baseURL: "http://192.168.1.203:8080",
+  baseURL: "http://192.168.0.146:8080",
   // responseType: 'json',
   // withCredentials: true,
   headers: {
