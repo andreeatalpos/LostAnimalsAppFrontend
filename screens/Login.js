@@ -61,7 +61,6 @@ const Login = ({ navigation }) => {
         username: credentials.username,
         password: credentials.password,
       });
-      console.log(response.data.userDTO);
       const token = response.data.token;
       await saveToken(token);
       persistLogin(response.data.userDTO, response.message, response.status);
@@ -92,16 +91,6 @@ const Login = ({ navigation }) => {
     }
   };
 
-  // Retrieve the token from storage
-  const getToken = async () => {
-    try {
-      const token = await AsyncStorage.getItem("token");
-      return token;
-    } catch (e) {
-      console.error("Error getting token from storage:", e);
-    }
-  };
-
   const persistLogin = (credentials, message, status) => {
     AsyncStorage.setItem("currentUserCredentials", JSON.stringify(credentials))
       .then(() => {
@@ -119,8 +108,8 @@ const Login = ({ navigation }) => {
         <StatusBar style="purple" />
         <InnerContainer>
           <PageLogo source={require("./../assets/images/logo.png")} />
-          <PageTitle>Lost Animals App</PageTitle>
-          <SubTitle>Account Login</SubTitle>
+          <PageTitle>Furry Finder</PageTitle>
+          <SubTitle>Enter your credentials to login and explore :)</SubTitle>
 
           <Formik
             initialValues={{ username: "", password: "" }}
@@ -179,12 +168,6 @@ const Login = ({ navigation }) => {
                 )}
 
                 <Line />
-                {/* <StyledButton google={true} onPress={handleSubmit}>
-                                    <Fontisto name="google" color={purple} size={25} />
-                                    <ButtonText google={true}>
-                                        Sign in with Google
-                                    </ButtonText>
-                                </StyledButton> */}
                 <ExtraView>
                   <ExtraText> Don't have an account already? </ExtraText>
                   <TextLink onPress={() => navigation.navigate("Register")}>

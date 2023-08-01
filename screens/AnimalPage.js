@@ -10,9 +10,8 @@ import {
   CuteButton,
 } from "../components/styles";
 import { CredentialsContext } from "../components/CredentialsContext";
-import { ImageManipulator } from "expo-image-manipulator";
 import * as ImagePicker from "expo-image-picker";
-import baseAxios from "../components/axios/ApiManager";
+import baseAxios from "../components/axios/baseAxios";
 //keyboard avoiding wrapper
 import KeyboardAvoidingWrapper from "../components/KeyboardAvoidingWrapper";
 
@@ -72,16 +71,11 @@ const AnimalPage = ({
     }
   };
 
-  const handleAnimalFormSubmit = (data) => {
-    setAnimalData(data);
-  };
-
   const handleSubmit = async () => {
     if (!imageUri) {
       Alert.alert("Error", "Please fill all the fields and attach a photo");
       return;
     }
-    // const base64 = await downloadImage(imageUri);
     await uploadPhoto(imageUri, imageDescription);
   };
 
@@ -93,24 +87,17 @@ const AnimalPage = ({
       name: "photo.jpg",
     });
     formData.append("description", description);
-
     try {
-      const response = await baseAxios.post("image/upload", formData, {
+      const response = await baseAxios.post("/image/upload", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
-      console.log(response.data);
       setImageFileName(response.data);
       Alert.alert("Success", "Image uploaded successfully");
       setImageUri("");
       setImageDescription("");
       setShowAnimalForm(true);
-      console.log("am trimissss" + response.data);
-      // navigation.navigate("AnimalForm", {
-      //   imageFileName: response.data,
-      //   isFound: isFound,
-      // });
       handleShowAnimalForm(response.data);
     } catch (error) {
       console.error(error);
@@ -118,29 +105,9 @@ const AnimalPage = ({
     }
   }
 
-  async function resizeImage(uri, maxWidth) {
-    const manipResult = await ImageManipulator.manipulateAsync(
-      uri,
-      [{ resize: { maxWidth } }],
-      { compress: 0.5, format: "jpeg" } // Adjust the compression quality and format as needed
-    );
-    return manipResult;
-  }
-
   const handleCancel = () => {
     setIsImageSelected(false);
   };
-
-  async function onSubmitAnimalForm(animalData) {
-    try {
-      const response = await baseAxios.post("animal", animalData, {});
-      console.log(response);
-    } catch (error) {
-      console.log("eroare la create animal");
-      // console.error(error);
-    }
-    console.log("we have animal dataaa");
-  }
 
   return (
     <KeyboardAvoidingWrapper>
@@ -150,6 +117,8 @@ const AnimalPage = ({
           placeholder="Image Description"
           value={imageDescription}
           onChangeText={setImageDescription}
+          multiline={true}
+          numberOfLines={4}
         />
         {!isImageSelected && (
           <>

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { View, StyleSheet, TouchableOpacity, Text } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from "@expo/vector-icons";
@@ -12,7 +12,7 @@ const BottomBar = () => {
       iconName: "home",
       backgroundColor: "#E0E0E0",
       isActive: false,
-      screen: "HomeNew",
+      screen: "HomeScreen",
     },
     {
       title: "Lost & Found",
@@ -28,15 +28,6 @@ const BottomBar = () => {
       isActive: false,
       screen: "MyPets",
     },
-    {
-      title: "Account",
-      iconName: "person",
-      backgroundColor: "#E0E0E0",
-      isActive: false,
-      screen: "UserAccountPage",
-    },
-
-    // Add more buttons as needed
   ];
 
   const handleButtonPress = (index, screen) => {
@@ -73,13 +64,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-around",
     alignItems: "center",
-    height: 75,
+    height: 80,
     backgroundColor: "#F5F5F5",
   },
   button: {
     flex: 1,
     alignItems: "center",
-    paddingVertical: 8,
+    paddingVertical: 20,
   },
   buttonText: {
     fontSize: 12,

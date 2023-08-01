@@ -1,17 +1,20 @@
-import React, { useContext, useState } from "react";
-import { View, Text, StyleSheet, ImageBackground } from "react-native";
+import React, { useState } from "react";
+import { View, StyleSheet, ImageBackground } from "react-native";
 
 import { useNavigation } from "@react-navigation/native";
 import Home from "./Home";
 import AnimalPage from "./AnimalPage";
 import AnimalForm from "../components/AnimalForm";
+import SimilarAnimalsList from "../components/SimilarAnimalsList";
+import baseAxios from "../components/axios/baseAxios";
 
 const HomeNew = () => {
   const navigation = useNavigation();
-  const [isFound, setIsFound] = useState(false); // Default value is false
+  const [isFound, setIsFound] = useState(false);
   const [fileName, setFileName] = useState("");
   const [showAnimalPage, setShowAnimalPage] = useState(false);
   const [showAnimalForm, setShowAnimalForm] = useState(false);
+  const [showSimilarImages, setShowSimilarImages] = useState(false);
 
   const handleShowAnimalPage = (isFound) => {
     setShowAnimalPage(true);
@@ -24,16 +27,27 @@ const HomeNew = () => {
     setShowAnimalForm(true);
   };
 
-  const handleCancelAnimalForm = () => {
+  async function handleCancelAnimalForm() {
+    try {
+      const response = await baseAxios.delete("/image/" + fileName);
+    } catch (error) {
+      console.error(error);
+      Alert.alert("Error", "Failed to delete image");
+    }
     setShowAnimalForm(false);
-  };
+  }
 
   const handleAnimalFormSubmit = () => {
     setShowAnimalForm(false);
+    setShowSimilarImages(true);
   };
 
   const handleCancelAnimalPage = () => {
     setShowAnimalPage(false);
+  };
+
+  const handleExitSimilarImagesList = () => {
+    setShowSimilarImages(false);
   };
 
   return (
@@ -43,7 +57,7 @@ const HomeNew = () => {
         style={styles.backgroundImage}
       >
         <View style={styles.overlay}>
-          {!showAnimalPage && !showAnimalForm && (
+          {!showAnimalPage && !showAnimalForm && !showSimilarImages && (
             <Home handleShowAnimalPage={handleShowAnimalPage} />
           )}
           {showAnimalPage && (
@@ -68,10 +82,18 @@ const HomeNew = () => {
               />
             </View>
           )}
+          {showSimilarImages && (
+            <View style={styles.similar}>
+              <SimilarAnimalsList
+                route={{
+                  params: { imageFileName: fileName },
+                }}
+                handleExitSimilarImagesList={handleExitSimilarImagesList}
+              />
+            </View>
+          )}
         </View>
       </ImageBackground>
-
-      {/* Add the BottomBar component */}
     </View>
   );
 };
@@ -93,7 +115,11 @@ const styles = StyleSheet.create({
   },
   overlay2: {
     flex: 1,
-    padding: 20,
+    padding: 5,
+    justifyContent: "center",
+  },
+  similar: {
+    flex: 1,
     justifyContent: "center",
   },
   title: {

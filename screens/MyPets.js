@@ -1,40 +1,28 @@
 import React, { useContext, useState, useEffect } from "react";
-import {
-  InnerContainer,
-  PageTitle,
-  SubTitle,
-  StyledFormArea,
-  ButtonText,
-  StyledButton,
-  Colors,
-  Line,
-  HomeContainer,
-  HomeImage,
-  HomeStyledButton,
-  CuteButton,
-  LoadingContainer,
-} from "./../components/styles";
+import { PageTitle, LoadingContainer } from "./../components/styles";
 import { View, ActivityIndicator } from "react-native";
-import { StatusBar } from "expo-status-bar";
-// async storage
-import AsyncStorage from "@react-native-async-storage/async-storage";
-// credentials context
 import { CredentialsContext } from "./../components/CredentialsContext";
-import AnimalPage from "./AnimalPage";
-import baseAxios from "../components/axios/ApiManager";
+import baseAxios from "../components/axios/baseAxios";
 import AnimalItem from "../components/AnimalItem";
 import { ScrollView } from "react-native-gesture-handler";
+import SimilarAnimalsList from "../components/SimilarAnimalsList";
 
-const MyPets = () => {
+const MyPets = ({ navigation }) => {
   const [animals, setAnimals] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [selectedFilename, setSelectedFilename] = useState("");
+  const [showSimilarImages, setShowSimilarImages] = useState(false);
   const { storedCredentials, setStoredCredentials } =
     useContext(CredentialsContext);
   const { email, fullName, phoneNumber, role, username } = storedCredentials;
 
   useEffect(() => {
-    getAnimals();
-  }, []);
+    const reloadAnimals = navigation.addListener("focus", () => {
+      getAnimals();
+    });
+
+    return reloadAnimals;
+  }, [navigation]);
 
   async function getAnimals() {
     try {
@@ -43,14 +31,37 @@ const MyPets = () => {
       setAnimals(response.data);
       setLoading(false);
     } catch (error) {
-      console.log(error.message);
+      console.log(error.message + "aici oare");
       setLoading(false);
     }
   }
 
+  const handleCheckAgain = (filename) => {
+    setSelectedFilename(filename);
+    setShowSimilarImages(true);
+  };
+
+  async function handlePressTrash(filename) {
+    try {
+      setLoading(true);
+      await baseAxios.delete("/animal/" + filename);
+      getAnimals();
+      setLoading(false);
+    } catch (error) {
+      console.log(error.message + "ceeeee");
+      setLoading(false);
+    }
+  }
+
+  const handleExitSimilarImagesList = () => {
+    setShowSimilarImages(false);
+  };
+
   return (
     <ScrollView>
-      <PageTitle>The animals you helped since now :)</PageTitle>
+      {!showSimilarImages && (
+        <PageTitle>The animals you helped over time :)</PageTitle>
+      )}
       <View>
         {loading ? (
           <LoadingContainer>
@@ -58,16 +69,33 @@ const MyPets = () => {
           </LoadingContainer>
         ) : (
           <>
-            {animals !== null && animals.length > 0 ? (
+            {!showSimilarImages && animals !== null && animals.length > 0 ? (
               animals.map((animal, index) => (
-                <AnimalItem key={index} animal={animal} />
+                <AnimalItem
+                  key={index}
+                  animal={animal}
+                  showContactDetails={false}
+                  onPressCheckAgain={() => handleCheckAgain(animal.filename)}
+                  onPressTrash={() => handlePressTrash(animal.filename)}
+                  showCheckAgainButton={true}
+                />
               ))
             ) : (
-              <PageTitle>No animals found.</PageTitle>
+              <>
+                {!showSimilarImages && <PageTitle>No animals found.</PageTitle>}
+              </>
             )}
           </>
         )}
       </View>
+      {showSimilarImages && (
+        <SimilarAnimalsList
+          route={{
+            params: { imageFileName: selectedFilename },
+          }}
+          handleExitSimilarImagesList={handleExitSimilarImagesList}
+        />
+      )}
     </ScrollView>
   );
 };

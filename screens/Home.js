@@ -5,43 +5,23 @@ import {
   SubTitle,
   StyledFormArea,
   ButtonText,
-  StyledButton,
-  Colors,
-  Line,
   HomeContainer,
-  HomeImage,
   HomeStyledButton,
 } from "./../components/styles";
 import { View } from "react-native";
 import { StatusBar } from "expo-status-bar";
-//async storage
-import AsyncStorage from "@react-native-async-storage/async-storage";
 //credentials context
 import { CredentialsContext } from "./../components/CredentialsContext";
-import AnimalPage from "./AnimalPage";
 
-const Home = ({ navigation, handleShowAnimalPage }) => {
+const Home = ({ handleShowAnimalPage }) => {
   //context
-  const { storedCredentials, setStoredCredentials } =
-    useContext(CredentialsContext);
-  const { email, fullName, phoneNumber, role, username } = storedCredentials;
-  const formattedPhoneNumber = phoneNumber
-    ? phoneNumber.toString().substring(1)
-    : "";
-
-  const clearLogin = () => {
-    AsyncStorage.removeItem("currentUserCredentials")
-      .then(() => {
-        setStoredCredentials("");
-      })
-      .catch((error) => console.log(error));
-  };
+  const { storedCredentials } = useContext(CredentialsContext);
+  const { fullName } = storedCredentials;
 
   return (
     <>
       <StatusBar style="purple" />
       <InnerContainer>
-        {/* <HomeImage source={require("./../assets/images/home9.jpg")} /> */}
         <HomeContainer>
           <PageTitle home={true}>
             {fullName != null ? "Welcome, " + fullName : "Welcome to PetFinder"}
@@ -50,40 +30,16 @@ const Home = ({ navigation, handleShowAnimalPage }) => {
           <SubTitle home={true}>
             {"Helping you to reunite with your furry friend"}
           </SubTitle>
-          {/* <SubTitle home={true}>{username || 'james.smith'}</SubTitle>
-                    <SubTitle home={true}>{email || 'james.smith@gmail.com'}</SubTitle>
-                    <SubTitle home={true}>{formattedPhoneNumber || '0123456789'}</SubTitle>  */}
           <StyledFormArea>
             <View>
               <SubTitle>Lost or Found an Animal?</SubTitle>
-              <HomeStyledButton
-                // onPress={() =>
-                //   navigation.navigate("AnimalPage", { isFound: false })
-                // }
-                onPress={() => handleShowAnimalPage(false)}
-              >
+              <HomeStyledButton onPress={() => handleShowAnimalPage(false)}>
                 <ButtonText>I lost my pet</ButtonText>
               </HomeStyledButton>
-              <HomeStyledButton
-                // onPress={() => navigation.navigate('FoundAnimal')}
-                // onPress={() =>
-                //   navigation.navigate("AnimalPage", { isFound: true })
-                // }
-                onPress={() => handleShowAnimalPage(true)}
-              >
+              <HomeStyledButton onPress={() => handleShowAnimalPage(true)}>
                 <ButtonText>I found a pet</ButtonText>
               </HomeStyledButton>
-              {/* <HomeStyledButton
-                // onPress={() => navigation.navigate('FoundAnimal')}
-                onPress={() =>
-                  navigation.navigate("AnimalsList", { isFound: false })
-                }
-              >
-                <ButtonText>Show all lost animals</ButtonText>
-              </HomeStyledButton> */}
             </View>
-            {/* <Avatar source={require('./../assets/images/logo.png')}/> */}
-            <Line />
           </StyledFormArea>
         </HomeContainer>
       </InnerContainer>

@@ -1,16 +1,8 @@
 import axios from "axios";
-import React, { useState, useContext } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-//credentials context
-import { CredentialsContext } from "../CredentialsContext";
-
-// //context
-// const { storedCredentials, setStoredCredentials } =
 
 const baseAxios = axios.create({
-  baseURL: "http://192.168.0.146:8080",
-  // responseType: 'json',
-  // withCredentials: true,
+  baseURL: "http://172.20.10.2:8080",
   headers: {
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
@@ -18,7 +10,6 @@ const baseAxios = axios.create({
   },
 });
 
-// Add an interceptor to include the Authorization header with the token value
 baseAxios.interceptors.request.use(
   async (config) => {
     const token = await AsyncStorage.getItem("token");
@@ -30,13 +21,10 @@ baseAxios.interceptors.request.use(
   },
   async (error) => {
     if (error.response && error.response.status === 401) {
-      // Log the user out and redirect to login screen
       await AsyncStorage.removeItem("token");
       await AsyncStorage.removeItem("currentUserCredentials");
-      // Add navigation code here to redirect to login screen
       setStoredCredentials(null);
     }
-
     return Promise.reject(error);
   }
 );

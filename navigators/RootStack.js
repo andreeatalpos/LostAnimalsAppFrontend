@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from "react";
-import { Colors, AppBackground } from "../components/styles";
+import { AppBackground } from "../components/styles";
 import { NavigationContainer } from "@react-navigation/native";
 import {
   createDrawerNavigator,
@@ -11,7 +11,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import jwtDecode from "jwt-decode";
 import { CredentialsContext } from "./../components/CredentialsContext";
-import BottomBar from "../screens/BottomBar";
+import BottomBar from "../components/BottomBar";
 import Home from "./../screens/Home";
 import AnimalForm from "../components/AnimalForm";
 import AnimalPage from "../screens/AnimalPage";
@@ -20,8 +20,8 @@ import HomeNew from "../screens/HomeNew";
 import Login from "./../screens/Login";
 import Register from "./../screens/Register";
 import LostAndFound from "../screens/LostAndFound";
-import UserAccountPage from "../screens/UserAccountPage";
 import MyPets from "../screens/MyPets";
+import SimilarAnimalsList from "../components/SimilarAnimalsList";
 
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
@@ -41,7 +41,6 @@ const CustomDrawerContent = (props) => {
         console.log(exp);
         if (Date.now() >= exp * 1000) {
           console.log("EXPIREEED");
-          // Token has expired
           setStoredCredentials(null);
         }
       }
@@ -54,7 +53,11 @@ const CustomDrawerContent = (props) => {
     <DrawerContentScrollView {...props}>
       <DrawerItemList {...props} />
       {storedCredentials ? (
-        <DrawerItem label="Logout" onPress={() => setStoredCredentials(null)} />
+        <DrawerItem
+          label="Logout"
+          onPress={() => setStoredCredentials(null)}
+          style={{ backgroundColor: "lightcoral", marginTop: 330 }}
+        />
       ) : null}
     </DrawerContentScrollView>
   );
@@ -66,23 +69,48 @@ const RootStack = () => {
 
   return (
     <AppBackground>
-      <NavigationContainer>
+      <NavigationContainer
+        screenOptions={{
+          headerShown: false,
+        }}
+      >
         {storedCredentials ? (
           <Drawer.Navigator
             drawerContent={(props) => <CustomDrawerContent {...props} />}
+            screenOptions={{
+              headerTitle: "",
+            }}
           >
-            <Drawer.Screen name="HomeNew" component={HomeNew} />
-            <Drawer.Screen name="AnimalForm" component={AnimalForm} />
+            <Drawer.Screen name="HomeScreen" component={HomeNew} />
+            <Drawer.Screen name="LostAndFound" component={LostAndFound} />
+            <Drawer.Screen name="MyPets" component={MyPets} />
+            <Drawer.Screen
+              name="AnimalForm"
+              component={AnimalForm}
+              options={{ drawerLabel: () => null }}
+            />
             <Drawer.Screen
               name="AnimalPage"
               component={AnimalPage}
               initialParams={{ isFound: false }}
+              options={{ drawerLabel: () => null }}
             />
-            <Drawer.Screen name="AnimalsList" component={AnimalsList} />
-            <Drawer.Screen name="Home" component={Home} />
-            <Drawer.Screen name="LostAndFound" component={LostAndFound} />
-            <Drawer.Screen name="UserAccountPage" component={UserAccountPage} />
-            <Drawer.Screen name="MyPets" component={MyPets} />
+            <Drawer.Screen
+              name="SimilarAnimalsList"
+              component={SimilarAnimalsList}
+              initialParams={{ filename: "animal_af225c91.jpeg" }}
+              options={{ drawerLabel: () => null }}
+            />
+            <Drawer.Screen
+              name="AnimalsList"
+              component={AnimalsList}
+              options={{ drawerLabel: () => null }}
+            />
+            <Drawer.Screen
+              name="Home"
+              component={Home}
+              options={{ drawerLabel: () => null }}
+            />
           </Drawer.Navigator>
         ) : (
           <Stack.Navigator
@@ -93,13 +121,15 @@ const RootStack = () => {
               headerLeftContainerStyle: {
                 paddingLeft: 20,
               },
+              headerShown: false,
             }}
           >
             <Stack.Screen name="Login" component={Login} />
             <Stack.Screen name="Register" component={Register} />
           </Stack.Navigator>
         )}
-        <BottomBar />
+
+        {storedCredentials ? <BottomBar /> : null}
       </NavigationContainer>
     </AppBackground>
   );

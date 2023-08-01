@@ -2,7 +2,6 @@ import React, { useState, useContext } from "react";
 import {
   StyledContainer,
   InnerContainer,
-  PageLogo,
   PageTitle,
   SubTitle,
   StyledFormArea,
@@ -24,12 +23,7 @@ import { StatusBar } from "expo-status-bar";
 import { View, ActivityIndicator } from "react-native";
 
 //icons
-import {
-  Octicons,
-  Ionicons,
-  Fontisto,
-  MaterialIcons,
-} from "@expo/vector-icons";
+import { Octicons, Ionicons } from "@expo/vector-icons";
 
 //formik
 import { Formik } from "formik";
@@ -65,14 +59,13 @@ const Register = ({ navigation }) => {
         confirmedPassword: credentials.confirmPassword,
         phoneNumber: credentials.phoneNumber,
       });
-      console.log(response.data.userDTO);
       const token = response.data.token;
       await saveToken(token);
 
       persistLogin(response.data.userDTO, response.message, response.status);
     } catch (error) {
       if (error.response && error.response.status === 401) {
-        handleMessage("Invalid username or password.", "FAILED");
+        handleMessage("Invalid account info. Try again!", "FAILED");
       } else {
         console.log(error);
         handleMessage(
@@ -98,16 +91,6 @@ const Register = ({ navigation }) => {
     }
   };
 
-  // Retrieve the token from storage
-  const getToken = async () => {
-    try {
-      const token = await AsyncStorage.getItem("token");
-      return token;
-    } catch (e) {
-      console.error("Error getting token from storage:", e);
-    }
-  };
-
   const persistLogin = (credentials, message, status) => {
     AsyncStorage.setItem("currentUserCredentials", JSON.stringify(credentials))
       .then(() => {
@@ -125,8 +108,8 @@ const Register = ({ navigation }) => {
       <StyledContainer>
         <StatusBar style="purple" />
         <InnerContainer>
-          <PageTitle>Lost Animals App</PageTitle>
-          <SubTitle>Account Signup</SubTitle>
+          <PageTitle>Furry Finder</PageTitle>
+          <SubTitle>Create an account to get started.</SubTitle>
 
           <Formik
             initialValues={{
@@ -198,7 +181,7 @@ const Register = ({ navigation }) => {
                 <MyTextInput
                   label="Email Address"
                   icon="mail"
-                  placeholder="example@domain.com"
+                  placeholder="example123@domain.com"
                   placeholderTextColor={grey}
                   onChangeText={handleChange("email")}
                   onBlur={handleBlur("email")}
@@ -209,7 +192,7 @@ const Register = ({ navigation }) => {
                 <MyTextInput
                   label="Password"
                   icon="lock"
-                  placeholder="* * * * * * * *"
+                  placeholder=" P@ssw0rd1"
                   placeholderTextColor={grey}
                   onChangeText={handleChange("password")}
                   onBlur={handleBlur("password")}
@@ -223,7 +206,7 @@ const Register = ({ navigation }) => {
                 <MyTextInput
                   label="Confirm Password"
                   icon="lock"
-                  placeholder="* * * * * * * *"
+                  placeholder=" P@ssw0rd1"
                   placeholderTextColor={grey}
                   onChangeText={handleChange("confirmPassword")}
                   onBlur={handleBlur("confirmPassword")}

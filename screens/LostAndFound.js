@@ -1,30 +1,15 @@
 import React, { useState, useEffect } from "react";
+import { ScrollView, ActivityIndicator } from "react-native";
 import {
-  Alert,
-  ScrollView,
-  View,
-  ActivityIndicator,
-  StyleSheet,
-} from "react-native";
-import {
-  ImageContainer,
-  SelectedImage,
   PageTitle,
   ButtonText,
-  StyledContainerAnimal,
-  StyledTextInputForm,
   CuteButton,
-  StyledContainer,
   ButtonContainer,
   LoadingContainer,
+  StyledContainerLF,
 } from "../components/styles";
-import { CredentialsContext } from "../components/CredentialsContext";
 import AnimalItem from "../components/AnimalItem";
-
-import * as ImagePicker from "expo-image-picker";
-import baseAxios from "../components/axios/ApiManager";
-//keyboard avoiding wrapper
-import KeyboardAvoidingWrapper from "../components/KeyboardAvoidingWrapper";
+import baseAxios from "../components/axios/baseAxios";
 
 const LostAndFound = () => {
   const [isFound, setIsFound] = useState(false);
@@ -37,7 +22,6 @@ const LostAndFound = () => {
       setLoading(true);
       console.log(isFound);
       const response = await baseAxios.get("/animal/" + isFound);
-      console.log(response.data);
       setAnimals(response.data);
       setLoading(false);
     } catch (error) {
@@ -61,7 +45,7 @@ const LostAndFound = () => {
 
   return (
     <ScrollView>
-      <StyledContainer>
+      <StyledContainerLF>
         <ButtonContainer>
           <CuteButton
             active={activeButton === "lost"}
@@ -96,30 +80,21 @@ const LostAndFound = () => {
           <>
             {animals !== null && animals.length > 0 ? (
               animals.map((animal, index) => (
-                <AnimalItem key={index} animal={animal} />
+                <AnimalItem
+                  key={index}
+                  animal={animal}
+                  showContactDetails={true}
+                  showCheckAgainButton={false}
+                />
               ))
             ) : (
               <PageTitle>There are no animals in this list.</PageTitle>
             )}
           </>
         )}
-      </StyledContainer>
+      </StyledContainerLF>
     </ScrollView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  loadingContainer: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    height: 400,
-  },
-});
 
 export default LostAndFound;

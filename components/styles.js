@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { View, Text, Image, TextInput, TouchableOpacity } from "react-native";
 import Constants from "expo-constants";
 
 const StatusBarHeight = Constants.statusBarHeight;
@@ -43,7 +42,20 @@ export const StyledContainer = styled.View`
   padding: 25px;
   padding-top: ${StatusBarHeight + 30}px;
   padding-bottom: 45%;
-  background-color: rgba(255, 255, 255, 0.8); /* Updated background color */
+  background-color: rgba(255, 255, 255, 0.8);
+  flex-grow: 1;
+`;
+
+export const StyledContainerLF = styled.View`
+  flex: 1;
+  padding: 25px;
+  flex-grow: 1;
+`;
+
+export const StyledContainerAccount = styled.View`
+  flex: 1;
+  padding: 25px;
+  background-color: rgba(255, 255, 255, 0.8);
   flex-grow: 1;
 `;
 
@@ -51,7 +63,7 @@ export const StyledContainerForm = styled.View`
   flex: 1;
   padding: 25px;
   padding-bottom: 15%;
-  background-color: rgba(255, 255, 255, 0.8); /* Updated background color */
+  background-color: rgba(255, 255, 255, 0.8);
   flex-grow: 1;
 `;
 
@@ -59,7 +71,14 @@ export const StyledContainerAnimal = styled.View`
   flex: 1;
   padding: 25px;
   padding-top: 5%;
-  background-color: rgba(255, 255, 255, 0.8); /* Updated background color */
+  background-color: rgba(255, 255, 255, 0.8);
+  flex-grow: 1;
+`;
+
+export const StyledContainerSimilar = styled.View`
+  flex: 1;
+  padding: 3%;
+  background-color: rgba(255, 255, 255, 0.8);
   flex-grow: 1;
 `;
 
@@ -75,7 +94,8 @@ export const StyledTextInputForm = styled.TextInput`
   padding-right: 55px;
   border-radius: 5px;
   font-size: 15px;
-  height: 60px;
+  height: auto;
+  min-height: 60px;
   margin-vertical: 3px;
   margin-bottom: 10px;
   color: ${black};
@@ -213,13 +233,7 @@ export const StyledButton = styled.TouchableOpacity`
 export const ButtonText = styled.Text`
   color: ${purple};
   font-size: 16px;
-
-  ${(props) =>
-    props.google == true &&
-    `
-    padding: 3%;
-    padding-left: 25px;
-    `}
+  font-weight: bold;
 `;
 
 export const MsgBox = styled.Text`
@@ -245,7 +259,7 @@ export const ExtraView = styled.View`
 export const ExtraText = styled.Text`
   justify-content: center;
   align-content: center;
-  color: ${blue};
+  color: ${black};
   font-size: 15px;
 `;
 
@@ -257,6 +271,7 @@ export const TextLink = styled.TouchableOpacity`
 export const TextLinkContent = styled.Text`
   color: ${purple};
   font-size: 18px;
+  font-weight: bold;
 
   ${(props) => {
     const { resendStatus } = props;
@@ -306,9 +321,9 @@ export const IconBg = styled.View`
   border-radius: 250px;
   height: 250px;
   width: 250px;
-  justify-content: center; //centers icon vertically
-  align-items: center; //centers icon horizontally
-  margin-top: -60px; //moves IconBg up by half its height to center it vertically
+  justify-content: center;
+  align-items: center;
+  margin-top: -60px;
   display: flex;
   justify-content: center;
 `;
@@ -333,7 +348,7 @@ export const InlineGroup = styled.View`
 
 export const AppBackground = styled.View`
   flex: 1;
-  background-color: ${white};
+  background-color: ${Colors.white};
 `;
 
 export const HomeStyledButton = styled.TouchableOpacity`
@@ -345,7 +360,7 @@ export const HomeStyledButton = styled.TouchableOpacity`
   border-radius: 25px;
   margin-vertical: 10px;
   height: 60px;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3); /* Add shadow */
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
 `;
 
 export const ImageContainer = styled.View`

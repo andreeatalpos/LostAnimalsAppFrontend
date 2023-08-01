@@ -1,36 +1,17 @@
-import React, { useContext, useState } from "react";
-import {
-  InnerContainer,
-  PageTitle,
-  SubTitle,
-  StyledFormArea,
-  ButtonText,
-  StyledButton,
-  Colors,
-  Line,
-  HomeContainer,
-  HomeImage,
-  HomeStyledButton,
-  CuteButton,
-} from "./../components/styles";
+import React, { useState } from "react";
+import { ButtonText, CuteButton } from "./../components/styles";
 import { View } from "react-native";
-import { StatusBar } from "expo-status-bar";
-//async storage
-import AsyncStorage from "@react-native-async-storage/async-storage";
-//credentials context
-import { CredentialsContext } from "./../components/CredentialsContext";
-import AnimalPage from "./AnimalPage";
-import baseAxios from "../components/axios/ApiManager";
+import baseAxios from "../components/axios/baseAxios";
 import AnimalItem from "../components/AnimalItem";
 import { ScrollView } from "react-native-gesture-handler";
 
 const AnimalsList = ({ navigation, route }) => {
-  const { isFound } = route.params;
   const [animals, setAnimals] = useState([]);
   async function getAnimals() {
     try {
-      const response = await baseAxios.get("/animal/" + isFound);
-      // console.log(response.data);
+      const response = await baseAxios.get(
+        "/animal/similar/" + "animal_276bfd63.jpeg"
+      );
       setAnimals(response.data);
     } catch (error) {
       console.log(error.message);
@@ -44,7 +25,11 @@ const AnimalsList = ({ navigation, route }) => {
           <ButtonText>Show animals</ButtonText>
         </CuteButton>
         {animals.map((animal, index) => (
-          <AnimalItem key={index} animal={animal} />
+          <AnimalItem
+            key={index}
+            animal={animal}
+            filename={"animal_276bfd63.jpeg"}
+          />
         ))}
       </View>
     </ScrollView>
